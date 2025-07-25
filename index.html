@@ -18,50 +18,60 @@
   </head>
 
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <!-- Firebase SDKs -->
-<script type="module">
-  // Import Firebase modules
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    <h1>Ze Elias Booking</h1>
 
-  // Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDqdcv_LEGiqvJrxomoHMO902Cx8zmiiVY",
-    authDomain: "zeeliasbookings.firebaseapp.com",
-    databaseURL: "https://zeeliasbookings-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "zeeliasbookings",
-    storageBucket: "zeeliasbookings.firebasestorage.app",
-    messagingSenderId: "551591035341",
-    appId: "1:551591035341:web:4814897183d43f39b40484",
-    measurementId: "G-VH4ER6881J"
-  };
+    <!-- ✅ Booking Form -->
+    <form id="booking-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+      <br />
+      <label for="time">Time:</label>
+      <input type="time" id="time" required />
+      <br />
+      <button type="submit">Book Now</button>
+    </form>
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    <!-- Optional: placeholder for bookings list (future use) -->
+    <div id="bookings"></div>
 
-  // Booking Form Submission
-  document.getElementById("booking-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    <script type="module">
+      // Firebase SDK
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const name = document.getElementById("name").value;
-    const time = document.getElementById("time").value;
+      const firebaseConfig = {
+        apiKey: "AIzaSyDqdcv_LEGiqvJrxomoHMO902Cx8zmiiVY",
+        authDomain: "zeeliasbookings.firebaseapp.com",
+        databaseURL: "https://zeeliasbookings-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "zeeliasbookings",
+        storageBucket: "zeeliasbookings.firebasestorage.app",
+        messagingSenderId: "551591035341",
+        appId: "1:551591035341:web:4814897183d43f39b40484",
+        measurementId: "G-VH4ER6881J"
+      };
 
-    try {
-      await addDoc(collection(db, "bookings"), {
-        name: name,
-        time: time,
-        timestamp: new Date()
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      document.getElementById("booking-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const time = document.getElementById("time").value;
+
+        try {
+          await addDoc(collection(db, "bookings"), {
+            name: name,
+            time: time,
+            timestamp: new Date()
+          });
+          alert("Booking saved successfully!");
+          document.getElementById("booking-form").reset();
+        } catch (error) {
+          console.error("Error saving booking: ", error);
+          alert("Failed to save booking.");
+        }
       });
-      alert("Booking saved successfully!");
-      document.getElementById("booking-form").reset();
-    } catch (error) {
-      console.error("Error saving booking: ", error);
-      alert("Failed to save booking.");
-    }
-  });
-</script>
+    </script>
   </body>
 </html>
