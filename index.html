@@ -20,5 +20,48 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Firebase SDKs -->
+<script type="module">
+  // Import Firebase modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqdcv_LEGiqvJrxomoHMO902Cx8zmiiVY",
+    authDomain: "zeeliasbookings.firebaseapp.com",
+    databaseURL: "https://zeeliasbookings-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "zeeliasbookings",
+    storageBucket: "zeeliasbookings.firebasestorage.app",
+    messagingSenderId: "551591035341",
+    appId: "1:551591035341:web:4814897183d43f39b40484",
+    measurementId: "G-VH4ER6881J"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Booking Form Submission
+  document.getElementById("booking-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const time = document.getElementById("time").value;
+
+    try {
+      await addDoc(collection(db, "bookings"), {
+        name: name,
+        time: time,
+        timestamp: new Date()
+      });
+      alert("Booking saved successfully!");
+      document.getElementById("booking-form").reset();
+    } catch (error) {
+      console.error("Error saving booking: ", error);
+      alert("Failed to save booking.");
+    }
+  });
+</script>
   </body>
 </html>
